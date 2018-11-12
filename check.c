@@ -1,6 +1,6 @@
 #include "myas.h"
 
-enum symbol{IMM, MEM, REG};
+enum symbol{IMM, MEM, REG, DISP};
 enum reg{EAX, ECX, EDX, EBX, ESP, EBP, ESI, EDI};
 #define FALSE -1
 
@@ -68,16 +68,16 @@ int check_symbol(char *str)
 	else if(str[0] == '('&& check_reg(str, 1) != FALSE && str[5] == ')')	//(%eax), (%ebx) ... = Memory
 		return MEM;
 	
-	else if(str[0] == '0' && str[1] == 'x'&& check_hexa(str, 2, last-6) != FALSE	//0x~~~(%edx) = Memory
+	else if(str[0] == '0' && str[1] == 'x'&& check_hexa(str, 2, last-6) != FALSE	//0x~~~(%edx) = Displacement
 		 && str[last - 5] == '(' && str[last - 4] == '%' && str[last - 3] == 'e' && str[last] == ')')
-		return MEM;
+		return DISP;
 
 	else if(str[0] == '0' && str[1] == 'x' && check_hexa(str, 2))	//0x~~~ = Memory
 		return MEM;
 
-	else if(str[0] == '-' && str[1] == '0' && str[2] == 'x' && str[last -5] == '(' &&	//-0x~~(%eax) = Memory
+	else if(str[0] == '-' && str[1] == '0' && str[2] == 'x' && str[last -5] == '(' &&	//-0x~~(%eax) = Displacement
 		check_reg(str, last - 4) != FALSE && str[last] == ')')
-		return MEM;
+		return DISP;
 	
 	else if(check_reg(str, 0) != FALSE)	//%eax, %ebx ... = Register
 		return REG;
