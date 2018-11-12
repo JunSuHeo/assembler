@@ -2,7 +2,7 @@
 
 int check_hexa(char *str, int start, int finish)
 {
-	while(start < strlen(str)){
+	while(start <= finish){
 		if(str[start] == '0' || str[start] == '1' || str[start] == '2' || str[start] == '3' ||
 		   str[start] == '4' || str[start] == '5' || str[start] == '6' || str[start] == '7' ||
 		   str[start] == '8' || str[start] == '9' || str[start] == 'a' || str[start] == 'b' ||
@@ -11,7 +11,7 @@ int check_hexa(char *str, int start, int finish)
 		else break;
 	}
 
-	if(start != finish)
+	if(start != finish + 1)
 		return FALSE;
 
 	else return 1;

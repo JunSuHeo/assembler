@@ -29,15 +29,13 @@ int main(int argc, char* argv[])
 		// translate assembly into machine-code 
 		if(!instr_trans(op, args, mcode)){
 			printf("Error: %s %s cannot be translated\n", op, args);
+			fprintf(ofp, "%s\n", mcode);
 			continue;
 		}
 		fprintf(ofp, "%s\n", mcode);
 	}
 
-	strcpy(mcode, "end");
-
-	fprintf(ofp, "%s\n", mcode);
-
+	
 	free(mcode);
 	fclose(ifp);
 	fclose(ofp);

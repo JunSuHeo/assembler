@@ -13,6 +13,7 @@ int instr_trans(char *op, char *args, char* mcode)
 	// check syntax 
 	if(!is_valid(op, args)){
 		printf("Error: %s %s is not valid\n", op, args);
+		strcpy(mcode, "error");
 		return 0;
 	}
 	
@@ -26,7 +27,11 @@ int instr_trans(char *op, char *args, char* mcode)
 	//1. reg to reg
 	if(check_reg(src, 0) != FALSE && check_reg(dest, 0) != FALSE)
 		strcpy(mcode, "89");
-	
+
+	//4. mem to reg(eax)
+	else if(check_symbol(src) == MEM && check_reg(dest, 0) == EAX)
+		strcpy(mcode, "a1");
+
 	//2. mem to reg
 	else if(check_symbol(src) == MEM && check_reg(dest, 0) != FALSE)
 		strcpy(mcode, "8b");
@@ -34,11 +39,6 @@ int instr_trans(char *op, char *args, char* mcode)
 	//3. mem to reg
 	else if(check_symbol(src) == DISP && check_reg(dest, 0) != FALSE)
 		strcpy(mcode, "8b");
-
-	//4. mem to reg(eax)
-	else if(check_symbol(src) == MEM && check_reg(dest, 0) == EAX)
-		strcpy(mcode, "a1");
-
 	//5. reg(eax) to mem
 	else if(check_reg(src, 0) == EAX && check_symbol(dest) == MEM)
 		strcpy(mcode, "a3");
