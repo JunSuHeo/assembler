@@ -1,5 +1,5 @@
 #include "myas.h"
-//git test
+
 int main(int argc, char* argv[])
 {
 	char ifname[20];

@@ -1,5 +1,14 @@
 #include "myas.h"
 
+enum symbol{FALSE, TRUE, REG, MEM, IMM, DISP};
+
+int check_symbol(char *str)
+{
+	
+
+
+}
+
 int instr_trans(char *op, char *args, char* mcode)
 {
 	// check syntax 
