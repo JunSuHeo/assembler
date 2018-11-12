@@ -1,5 +1,7 @@
 #include "myas.h"
 
+extern int instr_trans(char *op, char *args, char *mcode);
+
 int main(int argc, char* argv[])
 {
 	char ifname[20];
@@ -31,6 +33,10 @@ int main(int argc, char* argv[])
 		}
 		fprintf(ofp, "%s\n", mcode);
 	}
+
+	strcpy(mcode, "end");
+
+	fprintf(ofp, "%s\n", mcode);
 
 	free(mcode);
 	fclose(ifp);

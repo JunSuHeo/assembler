@@ -1,16 +1,12 @@
 #include "myas.h"
 
-enum symbol{IMM, MEM, REG, DISP};
-enum reg{EAX, ECX, EDX, EBX, ESP, EBP, ESI, EDI};
-#define FALSE -1
-
 int check_hexa(char *str, int start, int finish)
 {
-	while(idx < strlen(str)){
-		if(str[idx] == '0' || str[idx] == '1' || str[idx] == '2' || str[idx] == '3' ||
-		   str[idx] == '4' || str[idx] == '5' || str[idx] == '6' || str[idx] == '7' ||
-		   str[idx] == '8' || str[idx] == '9' || str[idx] == 'a' || str[idx] == 'b' ||
-		   str[idx] == 'c' || str[idx] == 'd' || str[idx] == 'e' || str[idx] == 'f'  )
+	while(start < strlen(str)){
+		if(str[start] == '0' || str[start] == '1' || str[start] == '2' || str[start] == '3' ||
+		   str[start] == '4' || str[start] == '5' || str[start] == '6' || str[start] == '7' ||
+		   str[start] == '8' || str[start] == '9' || str[start] == 'a' || str[start] == 'b' ||
+		   str[start] == 'c' || str[start] == 'd' || str[start] == 'e' || str[start] == 'f'  )
 			start++;
 		else break;
 	}
@@ -38,7 +34,7 @@ int check_reg(char *str, int idx)
 		else if(str[idx + 3] == 'p'){
 			if(str[idx + 2] == 's')
 				return ESP;
-			else if(str[idx + 2] =='b'
+			else if(str[idx + 2] =='b')
 				return EBP;
 			else return FALSE;
 		}
@@ -58,8 +54,8 @@ int check_symbol(char *str)
 {
 	int last = strlen(str) - 1;
 
-	if(str[0] == '$'){	//Immediate = $~~~~~~
-		if(check_hexa(str, 1, last) != FALSE)
+	if(str[0] == '$' && str[1] == '0' && str[2] == 'x'){	//Immediate = $~~~~~~
+		if(check_hexa(str, 3, last) != FALSE)
 			return IMM;
 		else
 			return FALSE;
@@ -72,11 +68,11 @@ int check_symbol(char *str)
 		 && str[last - 5] == '(' && str[last - 4] == '%' && str[last - 3] == 'e' && str[last] == ')')
 		return DISP;
 
-	else if(str[0] == '0' && str[1] == 'x' && check_hexa(str, 2))	//0x~~~ = Memory
+	else if(str[0] == '0' && str[1] == 'x' && check_hexa(str, 2, last))	//0x~~~ = Memory
 		return MEM;
 
-	else if(str[0] == '-' && str[1] == '0' && str[2] == 'x' && str[last -5] == '(' &&	//-0x~~(%eax) = Displacement
-		check_reg(str, last - 4) != FALSE && str[last] == ')')
+	else if(str[0] == '-' && str[1] == '0' && str[2] == 'x'&& check_hexa(str, 3, last - 6) != FALSE	//-0x~~~~(%ebp) = Displacement
+		 && str[last -5] == '(' && check_reg(str, last - 4) != FALSE && str[last] == ')')
 		return DISP;
 	
 	else if(check_reg(str, 0) != FALSE)	//%eax, %ebx ... = Register

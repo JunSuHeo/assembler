@@ -1,5 +1,9 @@
 #include "myas.h"
 
+extern int is_valid(char *op, char *args);
+extern int check_reg(char *str, int idx);
+extern int check_symbol(char *str);
+
 int instr_trans(char *op, char *args, char* mcode)
 {
 	char tmp[256];
@@ -68,7 +72,9 @@ int instr_trans(char *op, char *args, char* mcode)
 			break;
 		}
 	}
-		
+	
+	else
+		strcpy(mcode, "error");	
     /*  							*/
 	/*    generate machine code     */
     /*  							*/
